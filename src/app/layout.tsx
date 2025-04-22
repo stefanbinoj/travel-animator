@@ -2,6 +2,8 @@ import Navbar from "@/components/animator/navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/animator/app-sidebar";
 
 export const metadata: Metadata = {
   title: "Travel Animator",
@@ -25,7 +27,10 @@ export default function RootLayout({
           enableSystem={false}
         >
           <Navbar />
-          {children}
+          <SidebarProvider>
+            <AppSidebar />
+            <main>{children}</main>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>
