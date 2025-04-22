@@ -5,46 +5,36 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
 export function AppSidebar() {
+  const selected = false;
   return (
     <Sidebar collapsible="none">
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupContent className="flex justify-center ">
+            <SidebarMenuButton
+              size="default"
+              className={`${
+                selected ? "bg-[#0A84FF]" : "border-2"
+              } rounded-2xl px-5  `}
+            >
+              Routes
+            </SidebarMenuButton>
+            <SidebarMenuButton
+              className={`${
+                !selected ? "bg-[#0A84FF]" : "border-2"
+              } rounded-2xl  px-5 `}
+            >
+              Preview
+            </SidebarMenuButton>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarSeparator />
+        {/* <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -59,7 +49,7 @@ export function AppSidebar() {
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
     </Sidebar>
   );
