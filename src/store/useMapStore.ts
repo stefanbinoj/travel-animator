@@ -6,6 +6,12 @@ export type PositionType = {
   longitude: number;
 };
 
+type waypointsType = {
+  latitude: number;
+  longitude: number;
+  icon: string;
+};
+
 interface MapStoreType {
   selected: "route" | "preview";
   changeSelected: () => void;
@@ -15,21 +21,23 @@ interface MapStoreType {
   setMapStyle: (index: number) => void;
   position: PositionType;
   setPosition: (pos: PositionType) => void;
-  waypoints: PositionType[];
-  setWayPoints: (pos: PositionType) => void;
+  waypoints: waypointsType[];
+  setWayPoints: (pos: waypointsType) => void;
 }
 
 const mapStore = (set: any, get: any): MapStoreType => ({
   cookieModal: true,
-  waypoints: [],
+  waypoints: [
+    { latitude: 9.9312, longitude: 76.2673, icon: "car" },
+    { latitude: 9.9312, longitude: 76.2673, icon: "bus" },
+    { latitude: 9.9312, longitude: 76.2673, icon: "plane" },
+  ],
   selected: "route",
   mapStyle: 0,
   setMapStyle: (index: number) => set({ mapStyle: index }),
   changeSelected: () =>
     set((state: MapStoreType) => ({
-      selected: {
-        selected: state.selected === "route" ? "preview" : "route",
-      },
+      selected: state.selected === "route" ? "preview" : "route",
     })),
   closeCookieModal: () => set({ cookieModal: false }),
   position: { latitude: 9.9312, longitude: 76.2673 },
