@@ -1,0 +1,31 @@
+export const m1 = () => {
+    return(
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://carto.com/">CARTO</a> contributors',
+            subdomains: 'abcd',
+            maxZoom: 19
+          }).addTo(map);
+          
+    )
+}
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://carto.com/">CARTO</a> contributors',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri',
+  maxZoom: 19
+}).addTo(map);
+
+L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://stamen.com">Stamen Design</a>',
+  maxZoom: 20
+}).addTo(map);
+
+L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap',
+  maxZoom: 17
+}).addTo(map);
