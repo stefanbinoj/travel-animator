@@ -6,7 +6,7 @@ export type PositionType = {
   longitude: number;
 };
 
-type waypointsType = {
+export type waypointsType = {
   latitude: number;
   longitude: number;
   icon: string;
@@ -22,14 +22,14 @@ interface MapStoreType {
   position: PositionType;
   setPosition: (pos: PositionType) => void;
   waypoints: waypointsType[];
-  setWayPoints: (pos: waypointsType) => void;
+  setWayPoints: (wp: waypointsType[]) => void;
 }
 
 const mapStore = (set: any, get: any): MapStoreType => ({
   cookieModal: true,
   waypoints: [
-    { latitude: 9.9312, longitude: 76.2673, icon: "car" },
-    { latitude: 9.9312, longitude: 76.2673, icon: "bus" },
+    { latitude: 21.9312, longitude: 76.2673, icon: "plane" },
+    { latitude: 19.9312, longitude: 76.2673, icon: "finished" },
     { latitude: 9.9312, longitude: 76.2673, icon: "plane" },
   ],
   selected: "route",
@@ -42,16 +42,17 @@ const mapStore = (set: any, get: any): MapStoreType => ({
   closeCookieModal: () => set({ cookieModal: false }),
   position: { latitude: 9.9312, longitude: 76.2673 },
   setPosition: (pos: PositionType) => set({ position: pos }),
-  setWayPoints: (pos: PositionType) =>
-    set((state: MapStoreType) => ({ waypoints: [...state.waypoints, pos] })),
+  setWayPoints: (wp: PositionType[]) => set({ waypoints: wp }),
 });
 
-const useMapStore = create<MapStoreType>()(
-  devtools(
-    persist(mapStore, {
-      name: "map",
-    })
-  )
-);
+// const useMapStore = create<MapStoreType>()(
+//   devtools(
+//     persist(mapStore, {
+//       name: "map",
+//     })
+//   )
+// );
+
+const useMapStore = create<MapStoreType>()(mapStore);
 
 export default useMapStore;
