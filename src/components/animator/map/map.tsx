@@ -1,5 +1,6 @@
 "use client";
 
+import { mapStyleLinkArray } from "@/lib/constants";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import { useEffect, useRef } from "react";
@@ -12,13 +13,7 @@ export default function Map() {
 
     const map = L.map(mapRef.current).setView([9.9312, 76.2673], 5);
 
-    L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution: "Tiles &copy; Esri",
-        maxZoom: 19,
-      }
-    ).addTo(map);
+    L.tileLayer(`${mapStyleLinkArray[5]}`).addTo(map);
 
     // Routing control (uncomment when needed)
     // const control = L.Routing.control({

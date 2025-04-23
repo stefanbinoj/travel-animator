@@ -7,6 +7,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,9 +16,10 @@ import {
 import useMapStore, { MapStoreType, waypointsType } from "@/store/useMapStore";
 import Image from "next/image";
 import { Slider } from "../ui/slider";
-import { Flag, Map, MapPinned, ChevronRight } from "lucide-react";
+import { Flag, Map, MapPinned, ChevronRight, ChevronLeft } from "lucide-react";
 import { Switch } from "../ui/switch";
 import TabsComponent from "../comp-426";
+import { mapArray } from "@/lib/constants";
 
 export function AppSidebar() {
   const selected = useMapStore((state) => state.selected);
@@ -98,7 +100,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarSeparator />
-        {selected == "route" ? (
+        {selected == "route" && (
           <SidebarGroup>
             <SidebarGroupLabel className="mb-3">
               {waypoints.length} Way points
@@ -179,7 +181,8 @@ export function AppSidebar() {
               </SidebarGroupContent>
             )}
           </SidebarGroup>
-        ) : (
+        )}
+        {selected == "preview" && !showMapStyle && (
           <>
             <SidebarGroup>
               <div className="flex justify-between mb-3 ">
@@ -257,8 +260,9 @@ export function AppSidebar() {
             </SidebarGroup>
             <SidebarGroup className="flex-row mb-3 px-5">
               <div className="flex gap-2">
-                <MapPinned size={22} className="self-center" />
-                {/* not showing */}
+                <SidebarHeader className="text-white self-center">
+                  <MapPinned size={22} className="self-center" />
+                </SidebarHeader>
                 <SidebarGroupLabel className="text-white">
                   Map style
                 </SidebarGroupLabel>
@@ -269,12 +273,50 @@ export function AppSidebar() {
                     <ChevronRight
                       onClick={() => setShowMapStyle(true)}
                       size={22}
-                      className="self-center"
+                      className="self-center cursor-pointer"
                     />
                   </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
+          </>
+        )}
+        {selected == "preview" && showMapStyle && (
+          <>
+            <SidebarGroup className="flex-row mb-3 px-5">
+              <div className="flex gap-2">
+                <SidebarHeader className="text-white self-center">
+                  <ChevronLeft
+                    onClick={() => setShowMapStyle(false)}
+                    size={22}
+                    className="self-center cursor-pointer"
+                  />
+                </SidebarHeader>
+                <SidebarGroupLabel className="text-white self-center">
+                  Map style
+                </SidebarGroupLabel>
+              </div>
+            </SidebarGroup>
+            {mapArray.map((img, idx) => (
+              <SidebarGroup key={idx} onClick={() => setMapStyle(idx)}>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <Image
+                        className={`${
+                          mapStyle === idx ? "border-2 border-blue-500" : ""
+                        } rounded-4xl`}
+                        src={`/${img}`}
+                        alt="map"
+                        width={280}
+                        height={65}
+                      />
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+            <h1>h</h1>
           </>
         )}
       </SidebarContent>
