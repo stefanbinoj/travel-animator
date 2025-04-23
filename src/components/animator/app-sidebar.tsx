@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/sidebar";
 import useMapStore, { waypointsType } from "@/store/useMapStore";
 import Image from "next/image";
-import { it } from "node:test";
 
 export function AppSidebar() {
   const selected = useMapStore((state) => state.selected);
@@ -32,20 +31,20 @@ export function AppSidebar() {
     return data.display_name || "Unknown location";
   }
 
-  useEffect(() => {
-    if (waypoints.length === 0) return;
+  // useEffect(() => {
+  //   if (waypoints.length === 0) return;
 
-    console.log("firing req");
-    const fetchAllPlaceNames = async () => {
-      const locationNames = await Promise.all(
-        waypoints.map((each) => getPlaceName(each.latitude, each.longitude))
-      );
-      console.log(locationNames);
-      setWaypointsLocation(locationNames);
-    };
+  //   console.log("firing req");
+  //   const fetchAllPlaceNames = async () => {
+  //     const locationNames = await Promise.all(
+  //       waypoints.map((each) => getPlaceName(each.latitude, each.longitude))
+  //     );
+  //     console.log(locationNames);
+  //     setWaypointsLocation(locationNames);
+  //   };
 
-    fetchAllPlaceNames();
-  }, [waypoints]);
+  //   fetchAllPlaceNames();
+  // }, [waypoints]);
 
   const deleteWayPoint = (item: waypointsType) => {
     console.log(item);
