@@ -10,12 +10,15 @@ export default function Map() {
     const L = require("leaflet");
     require("leaflet-routing-machine");
 
-    const map = L.map(mapRef.current).setView([9.9312, 76.2673], 13);
+    const map = L.map(mapRef.current).setView([9.9312, 76.2673], 9);
 
-    // OSM tile layer
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-    }).addTo(map); // :contentReference[oaicite:0]{index=0}
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution: "Tiles &copy; Esri",
+        maxZoom: 19,
+      }
+    ).addTo(map);
 
     // routing control with ≥2 waypoints
     const control = L.Routing.control({
