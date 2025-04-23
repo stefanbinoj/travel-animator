@@ -12,15 +12,33 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import useMapStore, { waypointsType } from "@/store/useMapStore";
+import useMapStore, { MapStoreType, waypointsType } from "@/store/useMapStore";
 import Image from "next/image";
+import { Slider } from "../ui/slider";
+import { Flag, Map, MapPinned, ChevronRight } from "lucide-react";
+import { Switch } from "../ui/switch";
+import TabsComponent from "../comp-426";
 
 export function AppSidebar() {
   const selected = useMapStore((state) => state.selected);
   const changeSelected = useMapStore((state) => state.changeSelected);
-  const waypoints = useMapStore((state) => state.waypoints);
-  const setWaypoints = useMapStore((state) => state.setWayPoints);
 
+  const waypoints = useMapStore((state) => state.waypoints);
+  const setWayPoints = useMapStore((state) => state.setWayPoints);
+
+  const modelSize = useMapStore((state) => state.modelSize);
+  const setModalSize = useMapStore((state) => state.setModalSize);
+
+  const duration = useMapStore((state) => state.duration);
+  const setDuration = useMapStore((state) => state.setDuration);
+
+  const flag = useMapStore((state) => state.flag);
+  const setFlag = useMapStore((state) => state.setFlag);
+
+  const mapStyle = useMapStore((state) => state.mapStyle);
+  const setMapStyle = useMapStore((state) => state.setMapStyle);
+
+  const [showMapStyle, setShowMapStyle] = useState<boolean>(false);
   const [waypointsLocation, setWaypointsLocation] = useState<string[]>([]);
 
   async function getPlaceName(lat: number, lon: number) {
@@ -53,7 +71,7 @@ export function AppSidebar() {
         !(wp.latitude === item.latitude && wp.longitude === item.longitude)
     );
     console.log("deleted : ", newWaypointsArr);
-    setWaypoints(newWaypointsArr);
+    setWayPoints(newWaypointsArr);
   };
 
   return (
@@ -162,25 +180,103 @@ export function AppSidebar() {
             )}
           </SidebarGroup>
         ) : (
-          <p>hi</p>
-        )}
+          <>
+            <SidebarGroup>
+              <div className="flex justify-between mb-3 ">
+                <SidebarGroupLabel className="text-white">
+                  Modal Size
+                </SidebarGroupLabel>
+                <SidebarGroupLabel className="text-white">
+                  {modelSize / 100}
+                </SidebarGroupLabel>
+              </div>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem className="flex gap-2 mx-2 ">
+                    <Slider
+                      value={[modelSize]}
+                      onValueChange={(e) => setModalSize(e[0])}
+                      className="text-blue-500"
+                    />
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <div className="flex justify-between mb-3 ">
+                <SidebarGroupLabel className="text-white">
+                  Duration
+                </SidebarGroupLabel>
+                <SidebarGroupLabel className="text-white">
+                  {duration} sec
+                </SidebarGroupLabel>
+              </div>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem className="flex gap-2 mx-2 ">
+                    <Slider
+                      value={[duration]}
+                      onValueChange={(e) => setDuration(e[0])}
+                      className="text-blue-500"
+                    />
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup className="flex-row mt-3 mb-3 px-5">
+              <div className="flex gap-2">
+                <Flag size={22} className="self-center" />
 
-        {/* <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup> */}
+                <SidebarGroupLabel className="text-white">
+                  Flag
+                </SidebarGroupLabel>
+              </div>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem className="flex gap-2 mx-2 ml-auto">
+                    <Switch checked={flag} onCheckedChange={() => setFlag()} />
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup className="flex-row mb-3 px-5">
+              <div className="flex gap-2">
+                <Map size={22} className="self-center" />
+
+                <SidebarGroupLabel className="text-white">
+                  Unit
+                </SidebarGroupLabel>
+              </div>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem className="flex gap-2 mx-2 ml-auto">
+                    <TabsComponent />
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup className="flex-row mb-3 px-5">
+              <div className="flex gap-2">
+                <MapPinned size={22} className="self-center" />
+                {/* not showing */}
+                <SidebarGroupLabel className="text-white">
+                  Map style
+                </SidebarGroupLabel>
+              </div>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem className="flex gap-2 mx-2 ml-auto">
+                    <ChevronRight
+                      onClick={() => setShowMapStyle(true)}
+                      size={22}
+                      className="self-center"
+                    />
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
     </Sidebar>
   );
