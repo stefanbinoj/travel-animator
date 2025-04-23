@@ -1,9 +1,10 @@
-import Navbar from "@/components/animator/navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/animator/app-sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/animator/navbar";
 
 export const metadata: Metadata = {
   title: "Travel Animator",
@@ -35,6 +36,7 @@ export default function RootLayout({
                 <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
                   {children}
                 </main>
+                <Toaster />
               </div>
             </SidebarProvider>
           </div>

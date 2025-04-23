@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
-type PositionType = {
+export type PositionType = {
   latitude: number;
   longitude: number;
 };
