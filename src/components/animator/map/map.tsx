@@ -57,5 +57,5 @@ export default function Map() {
     return () => map.remove();
   }, []);
 
-  return <div ref={mapRef} className="h-full w-full" />;
+  return <div ref={mapRef} className="h-full w-full z-1" />;
 }

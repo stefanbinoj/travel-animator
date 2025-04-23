@@ -21,7 +21,7 @@ export default function ToggleThemeComponent() {
 
   return (
     <div>
-      <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
+      <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium cursor-pointer">
         <Switch
           id={id}
           checked={!isDark}

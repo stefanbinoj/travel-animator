@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-type ModalType = "pro" | "sign-in" | "export" | "discard" | "profile" | null;
+export type ModalType =
+  | "pro"
+  | "sign-in"
+  | "export"
+  | "discard"
+  | "profile"
+  | null;
 
 interface NavStoreType {
   modal: ModalType;
