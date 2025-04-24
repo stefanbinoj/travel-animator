@@ -8,7 +8,7 @@ const Navbar = () => {
   const setModal = useNavStore((state) => state.setModal);
 
   return (
-    <nav className="w-dvw  text-white py-3 px-2">
+    <nav className="w-dvw  text-white py-3 px-2 z-100 backdrop-blur-md border-b border-white/20">
       <div className="flex  justify-between">
         <div className="flex gap-4">
           <div className="flex gap-2 text-centert">

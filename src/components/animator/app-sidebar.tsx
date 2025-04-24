@@ -316,7 +316,6 @@ export function AppSidebar() {
                 </SidebarGroupContent>
               </SidebarGroup>
             ))}
-            <h1>h</h1>
           </>
         )}
       </SidebarContent>

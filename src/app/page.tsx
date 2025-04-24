@@ -14,6 +14,8 @@ import ProfileModal from "@/components/animator/modals/profileModal";
 import ExportModal from "@/components/animator/modals/exportModal";
 import { toast } from "sonner";
 import PreviewMap from "@/components/animator/map/previewMap";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import ChooseVehicle from "@/components/animator/modals/choseVehicleModal";
 
 export default function Home() {
   useNavStore.subscribe(console.log);
@@ -47,7 +49,21 @@ export default function Home() {
 
   return (
     <div className="h-dvh">
-      {selected === "route" ? <MapNoSSR /> : <PreviewMap />}
+      {selected === "route" ? (
+        <MapNoSSR />
+      ) : (
+        <div className="flex">
+          <div className="flex-1 h-full w-full">
+            <PreviewMap />
+          </div>
+          <SidebarProvider className="w-auto">
+            <div className="flex flex-0 ">
+              <ChooseVehicle />
+            </div>
+            <SidebarTrigger />
+          </SidebarProvider>
+        </div>
+      )}
       {modal === "pro" && <ProModal />}
       {modal === "sign-in" && <SigninModal />}
       {modal === "profile" && <ProfileModal />}
