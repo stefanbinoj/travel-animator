@@ -115,7 +115,7 @@ export function AppSidebar() {
                         <Image
                           width={22}
                           height={8}
-                          src="/plane.png"
+                          src="/plane.svg"
                           alt="plane"
                         />
                         <input
@@ -149,7 +149,7 @@ export function AppSidebar() {
                       <Image
                         width={22}
                         height={8}
-                        src="/plane.png"
+                        src="/plane.svg"
                         alt="plane"
                       />
                       <input
@@ -166,7 +166,7 @@ export function AppSidebar() {
                       <Image
                         width={22}
                         height={8}
-                        src="/finished.png"
+                        src="/flag.svg"
                         alt="plane"
                       />
                       <input

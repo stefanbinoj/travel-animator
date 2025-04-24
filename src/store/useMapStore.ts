@@ -48,9 +48,9 @@ const mapStore: StateCreator<MapStoreType> = (set, get) => ({
   closeCookieModal: () => set({ cookieModal: false }),
 
   waypoints: [
-    { latitude: 21.9312, longitude: 76.2673, icon: "plane" },
-    { latitude: 19.9312, longitude: 76.2673, icon: "finished" },
-    { latitude: 9.9312, longitude: 76.2673, icon: "plane" },
+    { latitude: 21.9312, longitude: 76.2673, icon: "plane.svg" },
+    { latitude: 19.9312, longitude: 76.2673, icon: "flag.svg" },
+    { latitude: 9.9312, longitude: 76.2673, icon: "plane.svg" },
   ],
   setWayPoints: (wp: waypointsType[]) => set({ waypoints: wp }),
 

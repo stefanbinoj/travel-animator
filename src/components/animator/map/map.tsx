@@ -8,67 +8,116 @@ import { useEffect, useRef } from "react";
 
 export default function Map() {
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstance = useRef<L.Map | null>(null);
+  const controlRef = useRef<L.Routing.Control | null>(null);
+  const vehicleMarkerRef = useRef<L.Marker | null>(null);
+  const routeCoordsRef = useRef<{ lat: number; lng: number }[]>([]);
 
   const mapStyle = useMapStore((state) => state.mapStyle);
+  const position = useMapStore((state) => state.position);
 
   const waypoints = useMapStore((state) => state.waypoints);
   const setWayPoints = useMapStore((state) => state.setWayPoints);
 
-  let vehicleMarker: L.Marker<any>;
-  let routeCoords: { lat: number; lng: number }[] = [];
+  // Initialize map once
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || mapInstance.current) return;
 
-    const map = L.map(mapRef.current).setView([9.9312, 76.2673], 5);
+    const map = L.map(mapRef.current).setView(
+      [position.latitude, position.longitude],
+      5
+    );
+    mapInstance.current = map;
 
-    L.tileLayer(`${mapStyleLinkArray[mapStyle]}`).addTo(map);
+    return () => {
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
+  }, []);
+
+  // Add tile layer when mapStyle changes
+  useEffect(() => {
+    if (!mapInstance.current) return;
+    L.tileLayer(mapStyleLinkArray[mapStyle]).addTo(mapInstance.current);
+  }, [mapStyle]);
+
+  // Add or update routing control when waypoints change
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    if (controlRef.current) {
+      mapInstance.current.removeControl(controlRef.current);
+    }
 
     const control = L.Routing.control({
       waypoints: waypoints.map((wp) => L.latLng(wp.latitude, wp.longitude)),
       router: L.Routing.osrmv1(),
       routeWhileDragging: true,
+      show: false,
       createMarker: (i: number, wp: { latLng: L.LatLng }) => {
-        const iconUrl = waypoints[i]?.icon ?? "default.png"; // fallback if needed
-
-        const customIcon = L.icon({
-          iconUrl: `/routes/${iconUrl}`, // assuming it's in public/routes/
-          iconSize: [32, 32],
-          iconAnchor: [16, 32], // center bottom
-        });
-
-        return L.marker(wp.latLng, { icon: customIcon }) as L.Marker;
+        const iconUrl = waypoints[i]?.icon ?? "flag.svg";
+        return L.marker(wp.latLng, {
+          icon: L.icon({
+            iconUrl: `/${iconUrl}`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          }),
+        }) as L.Marker;
       },
-    } as L.Routing.RoutingControlOptions).addTo(map);
+    } as L.Routing.RoutingControlOptions).addTo(mapInstance.current);
 
-    map.on("click", (e: any) => {
-      const newPoint = {
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng,
-        icon: "plane",
-      };
-
-      setWayPoints([...waypoints, newPoint]);
-    });
+    controlRef.current = control;
 
     const vehicleIcon = L.divIcon({ html: "🚗", iconSize: [32, 32] });
-    vehicleMarker = L.marker([0, 0], { icon: vehicleIcon }).addTo(map);
+    const marker = L.marker([0, 0], { icon: vehicleIcon }).addTo(
+      mapInstance.current
+    );
+    vehicleMarkerRef.current = marker;
 
     control.on("routesfound", (e: any) => {
-      routeCoords = e.routes[0].coordinates; // Store for later animation
+      routeCoordsRef.current = e.routes[0].coordinates;
     });
 
     return () => {
-      map.remove();
+      if (controlRef.current)
+        mapInstance.current?.removeControl(controlRef.current);
     };
-  }, [mapStyle, waypoints]);
+  }, [waypoints]);
 
+  // Click event to add new waypoint
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    const onClick = (e: any) => {
+      setWayPoints([
+        ...waypoints,
+        {
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          icon: "plane.svg",
+        },
+      ]);
+    };
+
+    mapInstance.current.on("click", onClick);
+
+    return () => {
+      mapInstance.current?.off("click", onClick);
+    };
+  }, [waypoints]);
+
+  // Vehicle animation trigger (can be used on a button click)
   const animateVehicle = () => {
-    if (!routeCoords.length || !vehicleMarker) return;
+    const coords = routeCoordsRef.current;
+    const marker = vehicleMarkerRef.current;
+    if (!coords.length || !marker) return;
 
     let i = 0;
     const animate = () => {
-      if (i >= routeCoords.length) return;
-      vehicleMarker.setLatLng([routeCoords[i].lat, routeCoords[i].lng]);
+      if (i >= coords.length) return;
+      marker.setLatLng([coords[i].lat, coords[i].lng]);
       i++;
       requestAnimationFrame(animate);
     };
