@@ -5,6 +5,7 @@ import React from "react";
 import { Button } from "../../ui/button";
 import ToggleThemeComponent from "./themeToggle";
 import useNavStore from "@/store/useNavStore";
+import { AlertDialogDemo } from "./discardButton";
 
 const NavbarWithActions = () => {
   const setModal = useNavStore((state) => state.setModal);
@@ -22,7 +23,7 @@ const NavbarWithActions = () => {
         className="w-[40] h-[40] p-3 bg-[#2A2A2A] items-center flex justify-center rounded-full cursor-pointer"
         onClick={() => setModal("discard")}
       >
-        <Trash color="red" className="self-center" />
+        <AlertDialogDemo />
       </div>
       <Button
         onClick={() => setModal("export")}

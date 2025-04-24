@@ -7,12 +7,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import useMapStore from "@/store/useMapStore";
 import useNavStore from "@/store/useNavStore";
-import React from "react";
+import { Trash } from "lucide-react";
 
-const DiscardModal = () => {
+export function AlertDialogDemo() {
   const setWayPoints = useMapStore((state) => state.setWayPoints);
   const setModal = useNavStore((state) => state.setModal);
   const modal = useNavStore((state) => state.modal);
@@ -25,9 +27,13 @@ const DiscardModal = () => {
   const handleCancel = () => {
     setModal(null);
   };
-
   return (
     <AlertDialog>
+      <AlertDialogTrigger className="bg-[#2A2A2A]" asChild>
+        <Button variant="outline">
+          <Trash color="red" className="self-center" />
+        </Button>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Discard Route?</AlertDialogTitle>
@@ -43,6 +49,4 @@ const DiscardModal = () => {
       </AlertDialogContent>
     </AlertDialog>
   );
-};
-
-export default DiscardModal;
+}

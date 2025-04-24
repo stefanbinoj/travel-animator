@@ -81,6 +81,9 @@ importers:
       '@types/leaflet':
         specifier: ^1.9.17
         version: 1.9.17
+      '@types/leaflet-routing-machine':
+        specifier: ^3.2.8
+        version: 3.2.8
       '@types/node':
         specifier: ^20
         version: 20.17.30
@@ -780,6 +783,9 @@ packages:
 
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
+  '@types/leaflet-routing-machine@3.2.8':
+    resolution: {integrity: sha512-v2pJDv/nqbB769SsytHemhLkqwjVor9UdWvZ1l6Y2SEaXNt1yDwVrktc4sCT8/4n7npuEb8VP+UAk8xrPePqSQ==}
 
   '@types/leaflet@1.9.17':
     resolution: {integrity: sha512-IJ4K6t7I3Fh5qXbQ1uwL3CFVbCi6haW9+53oLWgdKlLP7EaS21byWFJxxqOx9y8I0AP0actXSJLVMbyvxhkUTA==}
@@ -1701,6 +1707,10 @@ snapshots:
       tailwindcss: 4.1.4
 
   '@types/geojson@7946.0.16': {}
+
+  '@types/leaflet-routing-machine@3.2.8':
+    dependencies:
+      '@types/leaflet': 1.9.17
 
   '@types/leaflet@1.9.17':
     dependencies:

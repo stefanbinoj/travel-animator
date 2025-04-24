@@ -47,7 +47,6 @@ export default function Home() {
     <div className="h-full">
       <MapNoSSR />
       {modal === "pro" && <ProModal />}
-      {modal === "discard" && <DiscardModal />}
       {modal === "sign-in" && <SigninModal />}
       {modal === "profile" && <ProfileModal />}
       {modal === "export" && <ExportModal />}
