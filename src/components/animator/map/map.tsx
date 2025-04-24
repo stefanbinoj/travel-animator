@@ -13,7 +13,7 @@ export default function Map() {
 
     const map = L.map(mapRef.current).setView([9.9312, 76.2673], 5);
 
-    L.tileLayer(`${mapStyleLinkArray[5]}`).addTo(map);
+    L.tileLayer(`${mapStyleLinkArray[0]}`).addTo(map);
 
     // Routing control (uncomment when needed)
     // const control = L.Routing.control({

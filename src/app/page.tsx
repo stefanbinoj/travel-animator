@@ -9,10 +9,10 @@ import useMapStore from "@/store/useMapStore";
 
 import MapNoSSR from "@/components/animator/map/mapNoSSR";
 import ProModal from "@/components/animator/modals/proModal";
-import DiscardModal from "@/components/animator/modals/proModal";
-import SigninModal from "@/components/animator/modals/proModal";
-import ProfileModal from "@/components/animator/modals/proModal";
-import ExportModal from "@/components/animator/modals/proModal";
+import DiscardModal from "@/components/animator/modals/discardModal";
+import SigninModal from "@/components/animator/modals/sign-inModal";
+import ProfileModal from "@/components/animator/modals/profileModal";
+import ExportModal from "@/components/animator/modals/exportModal";
 import { toast } from "sonner";
 
 export default function Home() {
