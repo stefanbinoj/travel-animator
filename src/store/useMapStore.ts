@@ -12,6 +12,11 @@ export type waypointsType = {
   icon: string;
 };
 
+export type RatioType = {
+  width: number;
+  height: number;
+};
+
 type unitType = "km" | "mil" | "off";
 
 export interface MapStoreType {
@@ -41,6 +46,9 @@ export interface MapStoreType {
 
   mapStyle: number;
   setMapStyle: (index: number) => void;
+
+  ratio: RatioType;
+  changeRatio: (ratio: RatioType) => void;
 }
 
 const mapStore: StateCreator<MapStoreType> = (set, get) => ({
@@ -77,6 +85,9 @@ const mapStore: StateCreator<MapStoreType> = (set, get) => ({
 
   position: { latitude: 9.9312, longitude: 76.2673 },
   setPosition: (pos: PositionType) => set({ position: pos }),
+
+  ratio: { width: 16, height: 9 },
+  changeRatio: (ratio: RatioType) => set({ ratio }),
 });
 
 // const useMapStore = create<MapStoreType>()(

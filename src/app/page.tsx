@@ -9,11 +9,11 @@ import useMapStore from "@/store/useMapStore";
 
 import MapNoSSR from "@/components/animator/map/mapNoSSR";
 import ProModal from "@/components/animator/modals/proModal";
-import DiscardModal from "@/components/animator/modals/discardModal";
 import SigninModal from "@/components/animator/modals/sign-inModal";
 import ProfileModal from "@/components/animator/modals/profileModal";
 import ExportModal from "@/components/animator/modals/exportModal";
 import { toast } from "sonner";
+import PreviewMap from "@/components/animator/map/previewMap";
 
 export default function Home() {
   useNavStore.subscribe(console.log);
@@ -22,6 +22,8 @@ export default function Home() {
   const modal = useNavStore((state) => state.modal);
 
   const setPosition = useMapStore((state) => state.setPosition);
+
+  const selected = useMapStore((state) => state.selected);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -44,8 +46,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-full">
-      <MapNoSSR />
+    <div className="h-dvh">
+      {selected === "route" ? <MapNoSSR /> : <PreviewMap />}
       {modal === "pro" && <ProModal />}
       {modal === "sign-in" && <SigninModal />}
       {modal === "profile" && <ProfileModal />}

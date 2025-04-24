@@ -27,7 +27,7 @@ const DiscardModal = () => {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={modal === "discard"}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Discard Route?</AlertDialogTitle>

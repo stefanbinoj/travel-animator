@@ -12,6 +12,7 @@ export default function Map() {
   const controlRef = useRef<L.Routing.Control | null>(null);
   const vehicleMarkerRef = useRef<L.Marker | null>(null);
   const routeCoordsRef = useRef<{ lat: number; lng: number }[]>([]);
+  const ratio = useMapStore((state) => state.ratio);
 
   const mapStyle = useMapStore((state) => state.mapStyle);
   const position = useMapStore((state) => state.position);
@@ -19,7 +20,7 @@ export default function Map() {
   const waypoints = useMapStore((state) => state.waypoints);
   const setWayPoints = useMapStore((state) => state.setWayPoints);
 
-  // Initialize map once
+  // Initialize map once - removed ratio dependency
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
 
@@ -29,6 +30,9 @@ export default function Map() {
     );
     mapInstance.current = map;
 
+    // Add initial tile layer
+    L.tileLayer(mapStyleLinkArray[mapStyle]).addTo(map);
+
     return () => {
       if (mapInstance.current) {
         mapInstance.current.remove();
@@ -37,9 +41,28 @@ export default function Map() {
     };
   }, []);
 
+  // Handle ratio changes by invalidating the map size
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    // This tells Leaflet that the container size has changed and needs to be recalculated
+    setTimeout(() => {
+      mapInstance.current?.invalidateSize();
+    }, 0);
+  }, [ratio]);
+
   // Add tile layer when mapStyle changes
   useEffect(() => {
     if (!mapInstance.current) return;
+
+    // Remove all existing tile layers first
+    mapInstance.current.eachLayer((layer) => {
+      if (layer instanceof L.TileLayer) {
+        mapInstance.current?.removeLayer(layer);
+      }
+    });
+
+    // Add the new tile layer
     L.tileLayer(mapStyleLinkArray[mapStyle]).addTo(mapInstance.current);
   }, [mapStyle]);
 
@@ -47,8 +70,24 @@ export default function Map() {
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    if (controlRef.current) {
-      mapInstance.current.removeControl(controlRef.current);
+    // Safe removal of existing control
+    if (controlRef.current && mapInstance.current) {
+      try {
+        mapInstance.current.removeControl(controlRef.current);
+      } catch (error) {
+        console.log("Error removing control:", error);
+      }
+      controlRef.current = null;
+    }
+
+    // Safe removal of existing vehicle marker
+    if (vehicleMarkerRef.current && mapInstance.current) {
+      try {
+        mapInstance.current.removeLayer(vehicleMarkerRef.current);
+      } catch (error) {
+        console.log("Error removing vehicle marker:", error);
+      }
+      vehicleMarkerRef.current = null;
     }
 
     const control = L.Routing.control({
@@ -77,12 +116,30 @@ export default function Map() {
     vehicleMarkerRef.current = marker;
 
     control.on("routesfound", (e: any) => {
-      routeCoordsRef.current = e.routes[0].coordinates;
+      if (e.routes && e.routes.length > 0 && e.routes[0].coordinates) {
+        routeCoordsRef.current = e.routes[0].coordinates;
+      }
     });
 
     return () => {
-      if (controlRef.current)
-        mapInstance.current?.removeControl(controlRef.current);
+      // Safe cleanup on unmount/dependency change
+      if (controlRef.current && mapInstance.current) {
+        try {
+          mapInstance.current.removeControl(controlRef.current);
+        } catch (error) {
+          console.log("Error cleaning up control:", error);
+        }
+        controlRef.current = null;
+      }
+
+      if (vehicleMarkerRef.current && mapInstance.current) {
+        try {
+          mapInstance.current.removeLayer(vehicleMarkerRef.current);
+        } catch (error) {
+          console.log("Error cleaning up vehicle marker:", error);
+        }
+        vehicleMarkerRef.current = null;
+      }
     };
   }, [waypoints]);
 
@@ -101,12 +158,20 @@ export default function Map() {
       ]);
     };
 
-    mapInstance.current.on("click", onClick);
+    const mapInstanceCurrent = mapInstance.current;
+    mapInstanceCurrent.on("click", onClick);
 
     return () => {
-      mapInstance.current?.off("click", onClick);
+      // Safe cleanup with a reference to the map instance
+      if (mapInstanceCurrent) {
+        try {
+          mapInstanceCurrent.off("click", onClick);
+        } catch (error) {
+          console.log("Error removing click listener:", error);
+        }
+      }
     };
-  }, [waypoints]);
+  }, [waypoints, setWayPoints]);
 
   // Vehicle animation trigger (can be used on a button click)
   const animateVehicle = () => {
@@ -116,13 +181,18 @@ export default function Map() {
 
     let i = 0;
     const animate = () => {
-      if (i >= coords.length) return;
-      marker.setLatLng([coords[i].lat, coords[i].lng]);
+      if (i >= coords.length || !marker) return;
+      try {
+        marker.setLatLng([coords[i].lat, coords[i].lng]);
+      } catch (error) {
+        console.log("Error animating vehicle:", error);
+        return; // Stop animation if there's an error
+      }
       i++;
       requestAnimationFrame(animate);
     };
     animate();
   };
 
-  return <div ref={mapRef} className="h-full w-full z-0" />;
+  return <div ref={mapRef} className="h-full w-full z-0 rounded-2xl" />;
 }
