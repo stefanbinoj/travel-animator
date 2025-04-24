@@ -1,7 +1,7 @@
 "use client";
 
 import { mapStyleLinkArray } from "@/lib/constants";
-import useMapStore from "@/store/useMapStore";
+import useMapStore, { waypointsType } from "@/store/useMapStore";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import { useEffect, useRef } from "react";
@@ -97,13 +97,31 @@ export default function Map() {
       show: false,
       createMarker: (i: number, wp: { latLng: L.LatLng }) => {
         const iconUrl = waypoints[i]?.icon ?? "flag.svg";
-        return L.marker(wp.latLng, {
+        const marker = L.marker(wp.latLng, {
           icon: L.icon({
             iconUrl: `/${iconUrl}`,
             iconSize: [32, 32],
             iconAnchor: [16, 32],
           }),
+          draggable: true,
+          autoPan: true,
         }) as L.Marker;
+
+        marker.on("dragend", function () {
+          const newLatLng = marker.getLatLng();
+
+          const updatedWaypoints = [...waypoints];
+          if (updatedWaypoints[i]) {
+            updatedWaypoints[i] = {
+              ...updatedWaypoints[i],
+              latitude: newLatLng.lat,
+              longitude: newLatLng.lng,
+            };
+          }
+          setWayPoints(updatedWaypoints);
+        });
+
+        return marker;
       },
     } as L.Routing.RoutingControlOptions).addTo(mapInstance.current);
 
