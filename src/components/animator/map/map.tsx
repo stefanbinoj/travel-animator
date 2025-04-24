@@ -1,6 +1,7 @@
 "use client";
 
 import { mapStyleLinkArray } from "@/lib/constants";
+import useMapStore from "@/store/useMapStore";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import { useEffect, useRef } from "react";
@@ -8,12 +9,14 @@ import { useEffect, useRef } from "react";
 export default function Map() {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
+  const mapStyle = useMapStore((state) => state.mapStyle);
+
   useEffect(() => {
     if (!mapRef.current) return;
 
     const map = L.map(mapRef.current).setView([9.9312, 76.2673], 5);
 
-    L.tileLayer(`${mapStyleLinkArray[0]}`).addTo(map);
+    L.tileLayer(`${mapStyleLinkArray[mapStyle]}`).addTo(map);
 
     // Routing control (uncomment when needed)
     // const control = L.Routing.control({
@@ -50,7 +53,7 @@ export default function Map() {
     return () => {
       map.remove();
     };
-  }, []);
+  }, [mapStyle]);
 
   return <div ref={mapRef} className="h-full w-full z-0" />;
 }
