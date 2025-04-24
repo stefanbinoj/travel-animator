@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 
 import { Square, RectangleHorizontal, RectangleVertical } from "lucide-react";
+import DimensionToggle from "@/components/ui/dimensionChange";
 
 const commonRatios: Array<{
   label: string;
@@ -53,7 +54,7 @@ export default function RatioSelector() {
   };
 
   return (
-    <div className="m-5 flex justify-end">
+    <div className="m-5 flex justify-end gap-3">
       <Select value={currentRatioItem.label} onValueChange={handleValueChange}>
         <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Ratio" />
@@ -72,6 +73,7 @@ export default function RatioSelector() {
           </SelectGroup>
         </SelectContent>
       </Select>
+      <DimensionToggle />
     </div>
   );
 }
