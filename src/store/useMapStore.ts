@@ -49,9 +49,12 @@ export interface MapStoreType {
 
   ratio: RatioType;
   changeRatio: (ratio: RatioType) => void;
-  
+
   is3D: boolean;
   toggleDimension: () => void;
+
+  selectedVehicleAvatar: string;
+  setSelectedVehicleAvatar: (veh: string) => void;
 }
 
 const mapStore: StateCreator<MapStoreType> = (set, get) => ({
@@ -91,9 +94,13 @@ const mapStore: StateCreator<MapStoreType> = (set, get) => ({
 
   ratio: { width: 16, height: 9 },
   changeRatio: (ratio: RatioType) => set({ ratio }),
-  
+
   is3D: false,
   toggleDimension: () => set((state: MapStoreType) => ({ is3D: !state.is3D })),
+
+  selectedVehicleAvatar: "/car.svg",
+  setSelectedVehicleAvatar: (veh: string) =>
+    set({ selectedVehicleAvatar: veh }),
 });
 
 // const useMapStore = create<MapStoreType>()(
