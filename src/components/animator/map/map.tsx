@@ -29,7 +29,7 @@ export default function Map() {
   const waypoints = useMapStore((state) => state.waypoints);
   const setWayPoints = useMapStore((state) => state.setWayPoints);
 
-  // Initialize map once - removed ratio dependency
+  // Initializing map
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
 
@@ -176,6 +176,21 @@ export default function Map() {
     };
   }, [waypoints]);
 
+  //changing the modalSize or for the vechicle avatar
+  useEffect(() => {
+    const marker = vehicleMarkerRef.current;
+    if (!marker || !mapInstance.current) return;
+
+    const vehicleIcon = L.icon({
+      className: "leaflet-rotated-icon",
+      iconUrl: `${selectedVehicleAvatar}`,
+      iconSize: [modelSize, modelSize],
+      iconAnchor: [modelSize / 2, modelSize / 2],
+    });
+
+    marker.setIcon(vehicleIcon);
+  }, [modelSize, selectedVehicleAvatar]);
+
   // Click event to add new waypoint
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -206,6 +221,7 @@ export default function Map() {
     };
   }, [waypoints, setWayPoints]);
 
+  // function to show the vehicle avatar movement
   const animateVehicle = () => {
     const coords = routeCoordsRef.current;
     const marker = vehicleMarkerRef.current;
@@ -219,15 +235,20 @@ export default function Map() {
         const to = L.latLng(coords[i + 1]);
         marker.setLatLng([coords[i].lat, coords[i].lng]);
         const angle = getAngle(from, to);
-        const el = marker.getElement();
-        // if (el) {
-        //   el.style.transform = `rotate(${angle}deg)`;
-        // }
+        setTimeout(() => {
+          const el = marker.getElement();
+          if (el) {
+            const prevTransform = el.style.transform;
+            const translateMatch = prevTransform.match(/translate3d\([^)]+\)/);
+            const translate = translateMatch ? translateMatch[0] : "";
+            el.style.transform = `${translate} rotate(${angle}deg)`;
+          }
+        }, 0);
       } catch (error) {
         console.log("Error animating vehicle:", error);
         return; // Stop animation if there's an error
       }
-      i++;
+      i += 100;
       requestAnimationFrame(animate);
     };
     animate();

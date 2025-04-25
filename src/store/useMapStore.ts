@@ -98,7 +98,7 @@ const mapStore: StateCreator<MapStoreType> = (set, get) => ({
   is3D: false,
   toggleDimension: () => set((state: MapStoreType) => ({ is3D: !state.is3D })),
 
-  selectedVehicleAvatar: "/car.svg",
+  selectedVehicleAvatar: "/avatar1.png",
   setSelectedVehicleAvatar: (veh: string) =>
     set({ selectedVehicleAvatar: veh }),
 });
