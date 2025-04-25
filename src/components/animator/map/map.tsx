@@ -189,7 +189,7 @@ export default function Map() {
     });
 
     marker.setIcon(vehicleIcon);
-  }, [modelSize, selectedVehicleAvatar]);
+  }, [modelSize, selectedVehicleAvatar, duration]);
 
   // Click event to add new waypoint
   useEffect(() => {
@@ -248,7 +248,7 @@ export default function Map() {
         console.log("Error animating vehicle:", error);
         return; // Stop animation if there's an error
       }
-      i += 100;
+      i += 30;
       requestAnimationFrame(animate);
     };
     animate();
