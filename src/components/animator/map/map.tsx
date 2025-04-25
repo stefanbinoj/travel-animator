@@ -257,10 +257,8 @@ export default function Map() {
   useEffect(() => {
     if (selected === "preview" && waypoints.length >= 2) {
       animateVehicle();
-    } else {
-      console.log(1);
     }
-  }, [selected, waypoints, routeCoordsRef.current]);
+  }, [selected, waypoints, routeCoordsRef.current, duration]);
 
   return <div ref={mapRef} className="h-full w-full z-0 rounded-2xl" />;
 }

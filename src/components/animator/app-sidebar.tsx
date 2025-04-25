@@ -197,6 +197,8 @@ export function AppSidebar() {
                 <SidebarMenu>
                   <SidebarMenuItem className="flex gap-2 mx-2 ">
                     <Slider
+                      min={25}
+                      max={60}
                       value={[modelSize]}
                       onValueChange={(e) => setModalSize(e[0])}
                       className="text-blue-500"
@@ -218,6 +220,8 @@ export function AppSidebar() {
                 <SidebarMenu>
                   <SidebarMenuItem className="flex gap-2 mx-2 ">
                     <Slider
+                      min={5}
+                      max={50}
                       value={[duration]}
                       onValueChange={(e) => setDuration(e[0])}
                       className="text-blue-500"
