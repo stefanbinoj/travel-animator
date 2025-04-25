@@ -77,7 +77,7 @@ const mapStore: StateCreator<MapStoreType> = (set, get) => ({
   mapStyle: 0,
   setMapStyle: (index: number) => set({ mapStyle: index }),
 
-  modelSize: 80,
+  modelSize: 30,
   setModalSize: (size: number) => set({ modelSize: size }),
 
   duration: 20,

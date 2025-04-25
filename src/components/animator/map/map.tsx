@@ -4,15 +4,24 @@ import { mapStyleLinkArray } from "@/lib/constants";
 import useMapStore, { waypointsType } from "@/store/useMapStore";
 import L from "leaflet";
 import "leaflet-routing-machine";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getAngle } from "@/lib/angleCalc";
 
 export default function Map() {
+  const [distance, setDistance] = useState<number | null>(null);
+
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const controlRef = useRef<L.Routing.Control | null>(null);
   const vehicleMarkerRef = useRef<L.Marker | null>(null);
   const routeCoordsRef = useRef<{ lat: number; lng: number }[]>([]);
   const ratio = useMapStore((state) => state.ratio);
+  const selected = useMapStore((state) => state.selected);
+  const selectedVehicleAvatar = useMapStore(
+    (state) => state.selectedVehicleAvatar
+  );
+  const modelSize = useMapStore((state) => state.modelSize);
+  const duration = useMapStore((state) => state.duration);
 
   const mapStyle = useMapStore((state) => state.mapStyle);
   const position = useMapStore((state) => state.position);
@@ -127,15 +136,21 @@ export default function Map() {
 
     controlRef.current = control;
 
-    const vehicleIcon = L.divIcon({ html: "🚗", iconSize: [32, 32] });
-    const marker = L.marker([0, 0], { icon: vehicleIcon }).addTo(
-      mapInstance.current
-    );
+    const vehicleIcon = L.icon({
+      className: "leaflet-rotated-icon",
+      iconUrl: `${selectedVehicleAvatar}`,
+      iconSize: [modelSize, modelSize],
+      iconAnchor: [modelSize / 2, modelSize / 2], // center the icon
+    });
+    const marker = L.marker([waypoints[0].latitude, waypoints[0].longitude], {
+      icon: vehicleIcon,
+    }).addTo(mapInstance.current);
     vehicleMarkerRef.current = marker;
 
     control.on("routesfound", (e: any) => {
       if (e.routes && e.routes.length > 0 && e.routes[0].coordinates) {
         routeCoordsRef.current = e.routes[0].coordinates;
+        setDistance(e.routes[0].summary.totalDistance);
       }
     });
 
@@ -191,7 +206,6 @@ export default function Map() {
     };
   }, [waypoints, setWayPoints]);
 
-  // Vehicle animation trigger (can be used on a button click)
   const animateVehicle = () => {
     const coords = routeCoordsRef.current;
     const marker = vehicleMarkerRef.current;
@@ -201,7 +215,14 @@ export default function Map() {
     const animate = () => {
       if (i >= coords.length || !marker) return;
       try {
+        const from = L.latLng(coords[i]);
+        const to = L.latLng(coords[i + 1]);
         marker.setLatLng([coords[i].lat, coords[i].lng]);
+        const angle = getAngle(from, to);
+        const el = marker.getElement();
+        // if (el) {
+        //   el.style.transform = `rotate(${angle}deg)`;
+        // }
       } catch (error) {
         console.log("Error animating vehicle:", error);
         return; // Stop animation if there's an error
@@ -211,6 +232,14 @@ export default function Map() {
     };
     animate();
   };
+
+  useEffect(() => {
+    if (selected === "preview" && waypoints.length >= 2) {
+      animateVehicle();
+    } else {
+      console.log(1);
+    }
+  }, [selected, waypoints, routeCoordsRef.current]);
 
   return <div ref={mapRef} className="h-full w-full z-0 rounded-2xl" />;
 }

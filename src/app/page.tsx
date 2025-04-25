@@ -57,10 +57,10 @@ export default function Home() {
             <PreviewMap />
           </div>
           <SidebarProvider className="w-auto">
+            <SidebarTrigger />
             <div className="flex flex-0 ">
               <ChooseVehicle />
             </div>
-            <SidebarTrigger />
           </SidebarProvider>
         </div>
       )}

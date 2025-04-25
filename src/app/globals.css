@@ -142,3 +142,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.leaflet-rotated-icon {
+  transform-origin: center center !important;
+}
