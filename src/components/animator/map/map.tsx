@@ -151,6 +151,12 @@ export default function Map() {
       if (e.routes && e.routes.length > 0 && e.routes[0].coordinates) {
         routeCoordsRef.current = e.routes[0].coordinates;
         setDistance(e.routes[0].summary.totalDistance);
+        //const route = e.routes[0];
+        // route.layer.setStyle({
+        //   color: "blue", // Change route color
+        //   weight: 5, // Change route line width
+        //   opacity: 0.7, // Set route line opacity
+        // });
       }
     });
 
